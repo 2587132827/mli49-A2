@@ -1,9 +1,6 @@
 package github.io.mli49.assignment.part7;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -261,5 +258,56 @@ public class Ride implements RideInterface {
         }
     }
 
+    /**
+     * Import the ride history from a file
+     * @param fileName
+     */
+    public void importRideHistory(String fileName) {
+        BufferedReader reader = null;
+
+        try {
+            // Create a BufferedReader to read the file
+            File file = new File(fileName);
+            reader = new BufferedReader(new FileReader(file));
+
+            String line;
+            // Read each line (visitor details) from the file
+            while ((line = reader.readLine()) != null) {
+                // parse the format of text string
+                String[] visitorDetails = line.split(", ");
+
+                // Check if the visitorDetails array has enough elements (name, age, visitorType)
+                if (visitorDetails.length == 5) {
+                    // Extract and clean data from the split string
+                    String name = visitorDetails[0].split(": ")[1]; // Remove "Visitor: "
+                    int age = Integer.parseInt(visitorDetails[1].split(": ")[1]); // Remove "Age: "
+                    String gender = visitorDetails[2].split(": ")[1]; // Remove "Gender: "
+                    String membershipStatus = visitorDetails[3].split(": ")[1]; // Remove "Membership Status: "
+                    int visitCount = Integer.parseInt(visitorDetails[4].split(": ")[1]); // Remove "Visit Count: "
+
+                    // Create a new Visitor object using the extracted details
+                    Visitor visitor = new Visitor(name, age, gender, membershipStatus, visitCount);
+
+                    // Add the visitor to the ride history (assuming visitorsRidden is a List<Visitor>)
+                    visitorsRidden.add(visitor);
+                } else {
+                    System.out.println("Error: Invalid data format in line: " + line);
+                }
+            }
+            System.out.println("Ride history imported successfully from " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing visitor age: " + e.getMessage());
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();  // Close the reader
+                }
+            } catch (IOException e) {
+                System.out.println("Error closing the file reader: " + e.getMessage());
+            }
+        }
+    }
 }
 
