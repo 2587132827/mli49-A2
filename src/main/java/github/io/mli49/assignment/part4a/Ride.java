@@ -1,6 +1,6 @@
-package github.io.mli49.assignment.part3;
+package github.io.mli49.assignment.part4a;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -21,12 +21,17 @@ public class Ride implements RideInterface{
     /**
      * The queue of visitors waiting to ride
      */
-    private Queue<Visitor> visitorQueue;
+    private final Queue<Visitor> visitorQueue;
 
+    /**
+     * The list of visitors who have ridden the ride
+     */
+    private LinkedList<Visitor> visitorsRidden;
 
     // Default constructor
     public Ride() {
         visitorQueue = new LinkedList<>();
+        visitorsRidden = new LinkedList<>();
     }
 
     // Constructor with parameters
@@ -35,6 +40,7 @@ public class Ride implements RideInterface{
         this.rideType = rideType;
         this.rideOperator = rideOperator;
         visitorQueue = new LinkedList<>();
+        visitorsRidden = new LinkedList<>();
     }
 
     // Getters and setters
@@ -74,7 +80,6 @@ public class Ride implements RideInterface{
      * Add a visitor to the queue for the ride
      * @param visitor the visitor to add to the queue
      */
-    @Override
     public void addVisitorToQueue(Visitor visitor) {
         visitorQueue.add(visitor);
         System.out.println(visitor.getName() + " has joined the queue for " + rideName);
@@ -82,7 +87,6 @@ public class Ride implements RideInterface{
     /**
      * Remove a visitor from the queue for the ride
      */
-    @Override
     public void removeVisitorFromQueue() {
         Visitor removedVisitor = visitorQueue.poll();
         if (removedVisitor != null) {
@@ -94,7 +98,6 @@ public class Ride implements RideInterface{
     /**
      * Print the queue for the ride
      */
-    @Override
     public void printQueue() {
         if (visitorQueue.isEmpty()) {
             System.out.println("The queue for " + rideName + " is empty.");
@@ -108,29 +111,53 @@ public class Ride implements RideInterface{
 
     @Override
     public void runOneCycle() {
-        // will implement on package part5
+        // will implement in part5
     }
 
+    // part4a methods
+    /**
+     * Add a visitor to the history
+     * @param visitor
+     */
     @Override
     public void addVisitorToHistory(Visitor visitor) {
-        // will implement on package part4a
+        visitorsRidden.add(visitor);
     }
 
+    /**
+     * Check if a visitor has ridden the ride before
+     * @param visitor
+     * @return true if the visitor has ridden the ride before, false otherwise
+     */
     @Override
     public boolean checkVisitorFromHistory(Visitor visitor) {
-        // will implement on package part4a
-        return false;
+        return visitorsRidden.contains(visitor);
     }
 
+    /**
+     * Get the number of visitors
+     * @return the number of visitors
+     */
     @Override
     public int numberOfVisitors() {
-        // will implement on package part4a
-        return 0;
+        return visitorsRidden.size();
     }
 
+    /**
+     * Print the ride history
+     */
     @Override
     public void printRideHistory() {
-        // will implement on package part4a
+        if (visitorsRidden.isEmpty()) {
+            System.out.println("No visitors have taken the " + rideName + " yet.");
+        } else {
+            System.out.println("Ride history for " + rideName + ":");
+            Iterator<Visitor> iterator = visitorsRidden.iterator();
+            while (iterator.hasNext()) {
+                Visitor visitor = iterator.next();
+                System.out.println(visitor.getVisitorInfo());
+            }
+        }
     }
 }
 
