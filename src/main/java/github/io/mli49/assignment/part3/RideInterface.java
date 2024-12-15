@@ -1,6 +1,4 @@
-package github.io.mli49.assignment.part2;
-
-import github.io.mli49.assignment.part2.Visitor;
+package github.io.mli49.assignment.part3;
 
 public interface RideInterface {
     /**
